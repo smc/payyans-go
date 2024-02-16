@@ -24,12 +24,15 @@ func main() {
 
 	args := flag.Args()
 
-	if len(args) != 2 {
-		log.Fatal("Please provide input filename and output filename")
+	if len(args) < 1 {
+		log.Fatal("Please provide input filename")
 	}
 
 	inputFilename := args[0]
-	outputFilename := args[1]
+	outputFilename := ""
+	if len(args) > 1 {
+		outputFilename = args[1]
+	}
 
 	if *unicodeToAscii {
 		*asciiToUnicode = false
@@ -42,11 +45,15 @@ func main() {
 			log.Fatal(err.Error())
 		}
 
-		outputBytes := payyans.AsciiToUnicode(string(bytes), *fontName)
+		outputString := payyans.AsciiToUnicode(string(bytes), *fontName)
 
-		err = os.WriteFile(outputFilename, []byte(outputBytes), 0644)
-		if err != nil {
-			log.Fatal(err)
+		if outputFilename != "" {
+			err = os.WriteFile(outputFilename, []byte(outputString), 0644)
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			fmt.Println(outputString)
 		}
 	} else {
 

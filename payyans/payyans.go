@@ -1,78 +1,85 @@
 package payyans
 
 import (
-	"fmt"
+	"log"
 	"strings"
 )
 
 var preBase = []string{"േ", "െ", "ൈ", "ോ", "ൊ", "ൌ", "്ര"}
 var postBase = []string{"്യ", "്വ"}
 
-func AsciiToUnicode(input string, font string) string {
-	mapString, err := GetRules(font)
-
-	if err != nil {
-		fmt.Println("error: rule file not found")
-	}
-
-	const symbols = " 	,;.:?01234\\'\"56789\n"
+func AsciiToUnicode(input string, rulesMap map[string]string) string {
+	const symbols = " 	,;.:?01234'\"56789\n"
 	const mixCharactors = "CDH"
 
 	var output = ""
 
-	for i := 0; i < len(input); i++ {
-		stripedCharacter := input[i : i+1]
-		p := mapString[stripedCharacter]
-		sizeJ := i + 1
-		sizeK := i + 2
+	runes := []rune(input)
 
-		if strings.Contains(symbols, stripedCharacter) {
-			output += stripedCharacter
+	i := 0
+	for i < len(runes) {
+		currentCharacter := string(runes[i])
+		p := rulesMap[currentCharacter]
+
+		nextCharacter := ""
+		if i+1 < len(runes) {
+			nextCharacter = string(runes[i+1])
+		}
+
+		nextNextCharacter := ""
+		if i+2 < len(runes) {
+			nextNextCharacter = string(runes[i+2])
+		}
+
+		if strings.Contains(symbols, currentCharacter) {
+			output += currentCharacter
 		} else if p == "" {
-			output += stripedCharacter
-		} else if strings.Contains(mixCharactors, stripedCharacter) {
-			nextCharactor := input[sizeJ : sizeJ+1]
-			if nextCharactor == "u" {
-				if stripedCharacter == "C" {
-					output += mapString["Cu"] // ഈ
-				} else if stripedCharacter == "D" {
-					output += mapString["Du"] // ഊ
-				} else if stripedCharacter == "H" {
-					output += mapString["Hu"] // ഔ
+			output += currentCharacter
+		} else if strings.Contains(mixCharactors, currentCharacter) {
+			// to deal with "ഈ,ഊ,ഔ,ഓ"
+
+			nextCharacter := string(runes[i+1])
+			if nextCharacter == "u" {
+				if currentCharacter == "C" {
+					output += rulesMap["Cu"] // ഈ
+				} else if currentCharacter == "D" {
+					output += rulesMap["Du"] // ഊ
+				} else if currentCharacter == "H" {
+					output += rulesMap["Hu"] // ഔ
 				}
 				i++
-			} else if nextCharactor == "m" {
-				if stripedCharacter == "H" {
-					output += mapString["Hm"] // ഓ
-				} else if stripedCharacter == "t" {
-					output += mapString["tm"] // ോ
+			} else if nextCharacter == "m" {
+				if currentCharacter == "H" {
+					output += rulesMap["Hm"] // ഓ
+				} else if currentCharacter == "t" {
+					output += rulesMap["tm"] // ോ
 				}
 				i++
 			} else {
-				output += mapString[stripedCharacter]
+				output += rulesMap[currentCharacter]
 			}
 
-		} else if stripedCharacter == "s" && input[sizeJ:sizeJ+1] == "F" {
-			output += mapString["sF"] // ഐ
+		} else if currentCharacter == "s" && nextCharacter == "F" {
+			output += rulesMap["sF"] // ഐ
 			i++
-		} else if stripedCharacter == "s" && input[sizeJ:sizeJ+1] == "s" {
-			output += mapString[input[sizeK:sizeK+1]+mapString["ss"]] // ൈ
+		} else if currentCharacter == "s" && nextCharacter == "s" {
+			output += rulesMap[nextNextCharacter+rulesMap["ss"]] // ൈ
 			i = i + 2
 		} else if Contains[string](preBase, p) {
 			preBaseCharacter := p
-			mainCharactor := mapString[input[sizeJ:sizeJ+1]]
-			qCharacter := mapString[input[sizeK:sizeK+1]]
+			mainCharactor := rulesMap[nextCharacter]
+			qCharacter := rulesMap[nextNextCharacter]
 
 			if Contains[string](postBase, qCharacter) {
 				output += mainCharactor + qCharacter + preBaseCharacter
 				i = i + 2
 			} else {
-				if strings.Contains(symbols, input[sizeK:sizeK+1]) {
-					output += mainCharactor + preBaseCharacter + input[sizeK:sizeK+1]
+				if strings.Contains(symbols, nextNextCharacter) {
+					output += mainCharactor + preBaseCharacter + nextNextCharacter
 					i = i + 2
 				} else {
-					if input[sizeJ:sizeJ+1] == "{" {
-						output += qCharacter + mapString["{"] + preBaseCharacter
+					if nextCharacter == "{" {
+						output += qCharacter + rulesMap["{"] + preBaseCharacter
 						i = i + 2
 					} else {
 						output += mainCharactor + preBaseCharacter
@@ -80,15 +87,24 @@ func AsciiToUnicode(input string, font string) string {
 					}
 				}
 			}
-
 		} else {
 			output += p
 		}
-
+		i++
 	}
 
 	return output
+}
 
+func AsciiToUnicodeByMapFile(input string, mapFilePath string) string {
+	rulesMap, err := ReadAndCleanFile(mapFilePath)
+
+	if err != nil {
+		log.Println("error: rule file not found")
+		log.Fatal(err.Error())
+	}
+
+	return AsciiToUnicode(input, rulesMap)
 }
 
 func Contains[T comparable](s []T, e T) bool {
@@ -98,10 +114,6 @@ func Contains[T comparable](s []T, e T) bool {
 		}
 	}
 	return false
-}
-
-func GetRules(font string) (map[string]string, error) {
-	return ReadAndCleanFile(font)
 }
 
 // func Unicode2ASCII(unicodeText string, font string) string {

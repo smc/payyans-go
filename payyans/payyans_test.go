@@ -26,14 +26,14 @@ func assertEqual(t *testing.T, value interface{}, expected interface{}) {
 }
 
 func TestAsciiToUnicodeConversion(t *testing.T) {
-	bytes, err := os.ReadFile("testdata/indulekha.txt")
+	bytes, err := os.ReadFile("testdata/ml-ttkarthika.txt")
 	checkError(err)
 
 	lines := strings.Split(string(bytes), "\n\n")
 
 	for _, line := range lines {
 		inputAndExpected := strings.Split(line, "\n")
-		assertEqual(t, AsciiToUnicode(inputAndExpected[0], "indulekha"), inputAndExpected[1])
+		assertEqual(t, AsciiToUnicodeByMapFile(inputAndExpected[0], "../maps/ML-TTKarthika.map"), inputAndExpected[1])
 	}
 }
 
