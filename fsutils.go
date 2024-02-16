@@ -26,3 +26,7 @@ func ReadAndCleanFile(filename string) (map[string]string, error) {
 
 	return mapping, nil
 }
+
+func main() {
+
+}

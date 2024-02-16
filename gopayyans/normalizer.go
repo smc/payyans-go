@@ -1,4 +1,4 @@
-package gopayyans
+package payyans
 
 import (
 	"os"

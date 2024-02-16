@@ -1,4 +1,4 @@
-package gopayyans
+package payyans
 
 // func main() {
 // 	fmt.Println("some whit")
