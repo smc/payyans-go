@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/smc/payyans-go/payyans"
+	"payyans"
 )
 
 func main() {
@@ -24,6 +24,10 @@ func main() {
 
 	args := flag.Args()
 
+	if len(args) != 2 {
+		log.Fatal("Please provide input filename and output filename")
+	}
+
 	inputFilename := args[0]
 	outputFilename := args[1]
 
@@ -38,9 +42,9 @@ func main() {
 			log.Fatal(err.Error())
 		}
 
-		outputBytes := payyans.AsciiToUnicode(string(bytes))
+		outputBytes := payyans.AsciiToUnicode(string(bytes), *fontName)
 
-		err = os.WriteFile(outputFilename, outputBytes, 0644)
+		err = os.WriteFile(outputFilename, []byte(outputBytes), 0644)
 		if err != nil {
 			log.Fatal(err)
 		}
