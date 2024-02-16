@@ -1,4 +1,4 @@
-module github.com/smc/payyans
+module github.com/smc/payyans-go
 
 go 1.16
 
