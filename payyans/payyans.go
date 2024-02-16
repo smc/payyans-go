@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-var preBase = []string{"േ"}
-var postBase = []string{"േ"}
+var preBase = []string{"േ", "െ", "ൈ", "ോ", "ൊ", "ൌ", "്ര"}
+var postBase = []string{"്യ", "്വ"}
 
 func AsciiToUnicode(input string, font string) string {
 	mapString, err := GetRules(font)
