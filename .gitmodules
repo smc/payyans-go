@@ -1,0 +1,3 @@
+[submodule "maps"]
+	path = maps
+	url = https://github.com/libindic/unicode-conversion-maps

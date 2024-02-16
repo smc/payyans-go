@@ -13,12 +13,12 @@ func main() {
 	asciiToUnicode := flag.Bool("ascii-to-unicode", true, "ASCII to Unicode conversion. Selected by default")
 	unicodeToAscii := flag.Bool("unicode-to-ascii", false, "Unicode to ASCII conversion")
 
-	fontName := flag.String("font", "", "Font name")
+	fontMapFilePath := flag.String("map", "", "Path to map file")
 
 	flag.Parse()
 
-	if *fontName == "" {
-		fmt.Println("Specify a font name with -font.\n\nUse --help for all available commands.")
+	if *fontMapFilePath == "" {
+		fmt.Println("Please specify the path to font map file with -map.\n\nUse --help for all available commands.")
 		return
 	}
 
@@ -45,7 +45,7 @@ func main() {
 			log.Fatal(err.Error())
 		}
 
-		outputString := payyans.AsciiToUnicode(string(bytes), *fontName)
+		outputString := payyans.AsciiToUnicodeByMapFile(string(bytes), *fontMapFilePath)
 
 		if outputFilename != "" {
 			err = os.WriteFile(outputFilename, []byte(outputString), 0644)
