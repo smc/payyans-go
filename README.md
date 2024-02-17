@@ -20,13 +20,13 @@ Convert:
 ./payyanscli -font ML-TTKarthika.map file-to-convert.txt output-file.txt
 ```
 
-See `payya
+See `payyanscli -h` for more.
 
 ## Development
 
 ```bash
-go run cli/*.go -map maps/maps/ML-TTKarthika.map payyans/testdata/ml-ttkarthika.txt
-go test payyans/*.go
+go run cli.go -font ML-TTKarthika.map file-to-convert.txt
+make test
 ```
 
 ## Goals
