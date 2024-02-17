@@ -1,5 +1,15 @@
 package payyans
 
+/**
+ * Port of payyans to Go https://github.com/libindic/payyans
+ * Licensed under LGPL-3.0-only
+ *
+ * Copyright Subin Siby, 2024
+ * Copyright Alen Paul Varghese, 2024
+ *
+ * Original contributors of python payyans library: https://github.com/libindic/payyans/blob/master/pyproject.toml#L4-L10
+ */
+
 import (
 	"log"
 )
