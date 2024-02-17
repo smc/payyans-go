@@ -33,7 +33,7 @@ func TestAsciiToUnicodeConversion(t *testing.T) {
 
 	for _, line := range lines {
 		inputAndExpected := strings.Split(line, "\n")
-		assertEqual(t, AsciiToUnicodeByMapFile(inputAndExpected[0], "../maps/ML-TTKarthika.map"), inputAndExpected[1])
+		assertEqual(t, AsciiToUnicodeByMapFile(inputAndExpected[0], "../unicode-conversion-maps/maps/ML-TTKarthika.map"), inputAndExpected[1])
 	}
 }
 
