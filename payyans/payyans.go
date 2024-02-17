@@ -70,8 +70,8 @@ func AsciiToUnicode(input string, rulesMap map[string]string, normalizerMap map[
 	return normalizedOutput, nil
 }
 
-func AsciiToUnicodeByMapFiles(input string, mapFilePath string, normalizerMapFilePath string) (string, error) {
-	rulesMap, err := ParseEqualSplittedFile(mapFilePath)
+func AsciiToUnicodeByMapString(input string, fontMap string, normalizerMap string) (string, error) {
+	rulesMap, err := ParseEqualSplittedData(fontMap)
 
 	if err != nil {
 		log.Println("Error parsing conversion rule file")
@@ -80,8 +80,8 @@ func AsciiToUnicodeByMapFiles(input string, mapFilePath string, normalizerMapFil
 
 	var normalizerRulesMap map[string]string
 
-	if normalizerMapFilePath != "" {
-		normalizerRulesMap, err = ParseEqualSplittedFile(normalizerMapFilePath)
+	if normalizerMap != "" {
+		normalizerRulesMap, err = ParseEqualSplittedData(normalizerMap)
 
 		if err != nil {
 			log.Println("Error parsing normalizer rule file")

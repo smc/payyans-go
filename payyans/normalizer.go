@@ -22,12 +22,3 @@ func Normalize(input string, rulesMap map[string]string) (string, error) {
 
 	return some, nil
 }
-
-func NormalizeByRulesFile(input string, rulesFile string) (string, error) {
-	rulesMap, err := ParseEqualSplittedFile(rulesFile)
-	if err != nil {
-		return "", err
-	}
-
-	return Normalize(input, rulesMap)
-}

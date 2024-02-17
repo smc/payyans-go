@@ -4,10 +4,23 @@ This is the Go port of [payyans](https://github.com/smc/payyans) and [freaknz](h
 
 ## Usage
 
+By default the `payyanscli` binary comes with some font map files. See list of fonts:
+
 ```bash
-./payyanscli -map maps/maps/ML-TTKarthika.map file-to-convert.txt
-./payyanscli -map maps/maps/ML-TTKarthika.map file-to-convert.txt output-file.txt
+payyanscli -fonts
 ```
+
+Convert:
+
+```bash
+# Output to terminal
+./payyanscli -font ML-TTKarthika.map file-to-convert.txt
+
+# Output to a file
+./payyanscli -font ML-TTKarthika.map file-to-convert.txt output-file.txt
+```
+
+See `payya
 
 ## Development
 

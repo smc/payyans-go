@@ -1,7 +1,6 @@
 package payyans
 
 import (
-	"os"
 	"strings"
 )
 
@@ -18,17 +17,10 @@ func keyExists(m map[string]bool, key string) bool {
 	return ok
 }
 
-func ParseEqualSplittedFile(filename string) (map[string]string, error) {
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	dataInString := string(data)
-
+func ParseEqualSplittedData(data string) (map[string]string, error) {
 	mapping := make(map[string]string)
 
-	for _, line := range strings.Split(dataInString, "\n") {
+	for _, line := range strings.Split(data, "\n") {
 		parts := strings.Split(line, "=")
 		if len(parts) != 2 {
 			continue

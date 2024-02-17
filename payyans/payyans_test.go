@@ -15,6 +15,12 @@ func checkError(err error) {
 	}
 }
 
+func readFile(path string) string {
+	contents, err := os.ReadFile(path)
+	checkError(err)
+	return string(contents)
+}
+
 // AssertEqual checks if values are equal
 // Thanks https://gist.github.com/samalba/6059502#gistcomment-2710184
 func assertEqual(t *testing.T, value interface{}, expected interface{}) {
@@ -26,17 +32,17 @@ func assertEqual(t *testing.T, value interface{}, expected interface{}) {
 }
 
 func TestAsciiToUnicodeConversion(t *testing.T) {
-	bytes, err := os.ReadFile("testdata/ml-ttkarthika.txt")
+	bytes, err := os.ReadFile("testdata/ML-TTKarthika.txt")
 	checkError(err)
 
 	lines := strings.Split(string(bytes), "\n\n")
 
 	for _, line := range lines {
 		inputAndExpected := strings.Split(line, "\n")
-		output, err := AsciiToUnicodeByMapFiles(
+		output, err := AsciiToUnicodeByMapString(
 			inputAndExpected[0],
-			"../unicode-conversion-maps/maps/ML-TTKarthika.map",
-			"../normalizer/libindic/normalizer/normalizer_ml.rules",
+			readFile("../unicode-conversion-maps/maps/ML-TTKarthika.map"),
+			readFile("../normalizer/libindic/normalizer/normalizer_ml.rules"),
 		)
 
 		checkError(err)
