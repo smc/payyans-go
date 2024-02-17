@@ -1,3 +1,6 @@
 [submodule "maps"]
 	path = unicode-conversion-maps
 	url = https://github.com/libindic/unicode-conversion-maps
+[submodule "normalizer"]
+	path = normalizer
+	url = https://github.com/libindic/normalizer.git

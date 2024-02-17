@@ -4,10 +4,10 @@ import (
 	"log"
 )
 
-var preBase = []string{"േ", "ൈ", "്ര", "െ"}
+var preBase = []string{"േ", "ൈ", "െ", "്ര"}
 var postBase = []string{"ാ", "ി", "ീ", "ു", "ൂ", "ൃ", "ൗ", "ം", "ഃ", "്യ", "്വ"}
 
-func AsciiToUnicode(input string, rulesMap map[string]string) string {
+func AsciiToUnicode(input string, rulesMap map[string]string, normalizerMap map[string]string) (string, error) {
 	reverseRulesMap := reverseMap(rulesMap)
 
 	preBaseAsciiLetters := make(map[string]bool)
@@ -36,14 +36,8 @@ func AsciiToUnicode(input string, rulesMap map[string]string) string {
 			transposedText += currentChar + prebase
 			prebase = ""
 		} else {
-			transposedText += currentChar
-			if i+1 < len(runes) {
-				nextCharacter := string(runes[i+1])
-				if !keyExists(postBaseAsciiLetters, nextCharacter) {
-					transposedText += prebase
-					prebase = ""
-				}
-			}
+			transposedText += currentChar + prebase
+			prebase = ""
 		}
 		i++
 	}
@@ -53,6 +47,7 @@ func AsciiToUnicode(input string, rulesMap map[string]string) string {
 	}
 
 	// രണ്ടാമത്തെ ഓട്ടം: പച്ച മലയാളം
+	runes = []rune(transposedText)
 	unicodeText := ""
 	i = 0
 	for i < len(runes) {
@@ -66,27 +61,35 @@ func AsciiToUnicode(input string, rulesMap map[string]string) string {
 	}
 
 	// മൂന്നാമത്തെ ഓട്ടം: ചേരുംപടി ചേര്‍ക്കുക
-	return unicodeText
-}
-
-func AsciiToUnicodeByMapFile(input string, mapFilePath string) string {
-	rulesMap, err := ReadAndCleanFile(mapFilePath)
+	normalizedOutput, err := Normalize(unicodeText, normalizerMap)
 
 	if err != nil {
-		log.Println("error: rule file not found")
+		return "", err
+	}
+
+	return normalizedOutput, nil
+}
+
+func AsciiToUnicodeByMapFiles(input string, mapFilePath string, normalizerMapFilePath string) (string, error) {
+	rulesMap, err := ParseEqualSplittedFile(mapFilePath)
+
+	if err != nil {
+		log.Println("Error parsing conversion rule file")
 		log.Fatal(err.Error())
 	}
 
-	return AsciiToUnicode(input, rulesMap)
-}
+	var normalizerRulesMap map[string]string
 
-func contains[T comparable](s []T, e T) bool {
-	for _, v := range s {
-		if v == e {
-			return true
+	if normalizerMapFilePath != "" {
+		normalizerRulesMap, err = ParseEqualSplittedFile(normalizerMapFilePath)
+
+		if err != nil {
+			log.Println("Error parsing normalizer rule file")
+			log.Fatal(err.Error())
 		}
 	}
-	return false
+
+	return AsciiToUnicode(input, rulesMap, normalizerRulesMap)
 }
 
 // func Unicode2ASCII(unicodeText string, font string) string {

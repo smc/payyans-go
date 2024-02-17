@@ -14,6 +14,7 @@ func main() {
 	unicodeToAscii := flag.Bool("unicode-to-ascii", false, "Unicode to ASCII conversion")
 
 	fontMapFilePath := flag.String("map", "", "Path to map file")
+	normalizerRulesFilePath := flag.String("normalizer-rules", "", "Path to normalizer rules file")
 
 	flag.Parse()
 
@@ -45,7 +46,11 @@ func main() {
 			log.Fatal(err.Error())
 		}
 
-		outputString := payyans.AsciiToUnicodeByMapFile(string(bytes), *fontMapFilePath)
+		outputString, err := payyans.AsciiToUnicodeByMapFiles(string(bytes), *fontMapFilePath, *normalizerRulesFilePath)
+
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		if outputFilename != "" {
 			err = os.WriteFile(outputFilename, []byte(outputString), 0644)
