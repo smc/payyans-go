@@ -4,8 +4,8 @@ import (
 	"log"
 )
 
-var preBase = []string{"േ", "െ", "ൈ", "ോ", "ൊ", "ൌ", "്ര"}
-var postBase = []string{"്യ", "്വ"}
+var preBase = []string{"േ", "ൈ", "്ര", "െ"}
+var postBase = []string{"ാ", "ി", "ീ", "ു", "ൂ", "ൃ", "ൗ", "ം", "ഃ", "്യ", "്വ"}
 
 func AsciiToUnicode(input string, rulesMap map[string]string) string {
 	reverseRulesMap := reverseMap(rulesMap)
@@ -45,27 +45,28 @@ func AsciiToUnicode(input string, rulesMap map[string]string) string {
 				}
 			}
 		}
-
-		if prebase != "" {
-			transposedText += prebase
-		}
-
-		// രണ്ടാമത്തെ ഓട്ടം: പച്ച മലയാളം
-		unicodeText := ""
-		i := 0
-		for i < len(runes) {
-			currentChar := string(runes[i])
-			if mappedChar, ok := rulesMap[currentChar]; ok {
-				unicodeText += mappedChar
-			} else {
-				unicodeText += currentChar
-			}
-		}
-
 		i++
 	}
 
-	return output
+	if prebase != "" {
+		transposedText += prebase
+	}
+
+	// രണ്ടാമത്തെ ഓട്ടം: പച്ച മലയാളം
+	unicodeText := ""
+	i = 0
+	for i < len(runes) {
+		currentChar := string(runes[i])
+		if mappedChar, ok := rulesMap[currentChar]; ok {
+			unicodeText += mappedChar
+		} else {
+			unicodeText += currentChar
+		}
+		i++
+	}
+
+	// മൂന്നാമത്തെ ഓട്ടം: ചേരുംപടി ചേര്‍ക്കുക
+	return unicodeText
 }
 
 func AsciiToUnicodeByMapFile(input string, mapFilePath string) string {
