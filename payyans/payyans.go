@@ -2,94 +2,66 @@ package payyans
 
 import (
 	"log"
-	"strings"
 )
 
 var preBase = []string{"േ", "െ", "ൈ", "ോ", "ൊ", "ൌ", "്ര"}
 var postBase = []string{"്യ", "്വ"}
 
 func AsciiToUnicode(input string, rulesMap map[string]string) string {
-	const symbols = " 	,;.:?01234'\"56789\n"
-	const mixCharactors = "CDH"
+	reverseRulesMap := reverseMap(rulesMap)
 
-	var output = ""
+	preBaseAsciiLetters := make(map[string]bool)
+	postBaseAsciiLetters := make(map[string]bool)
+
+	// ആദ്യത്തെ ഓട്ടം: മുമ്പേ ഗമിക്കും പ്രീബേസിനെ പിടിച്ച് തോളില്‍ കയറ്റുക
+	for _, char := range preBase {
+		preBaseAsciiLetters[reverseRulesMap[char]] = true
+	}
+
+	for _, char := range postBase {
+		postBaseAsciiLetters[reverseRulesMap[char]] = true
+	}
 
 	runes := []rune(input)
 
+	transposedText := ""
+	prebase := ""
 	i := 0
 	for i < len(runes) {
-		currentCharacter := string(runes[i])
-		p := rulesMap[currentCharacter]
+		currentChar := string(runes[i])
 
-		nextCharacter := ""
-		if i+1 < len(runes) {
-			nextCharacter = string(runes[i+1])
-		}
-
-		nextNextCharacter := ""
-		if i+2 < len(runes) {
-			nextNextCharacter = string(runes[i+2])
-		}
-
-		if strings.Contains(symbols, currentCharacter) {
-			output += currentCharacter
-		} else if p == "" {
-			output += currentCharacter
-		} else if strings.Contains(mixCharactors, currentCharacter) {
-			// to deal with "ഈ,ഊ,ഔ,ഓ"
-
-			nextCharacter := string(runes[i+1])
-			if nextCharacter == "u" {
-				if currentCharacter == "C" {
-					output += rulesMap["Cu"] // ഈ
-				} else if currentCharacter == "D" {
-					output += rulesMap["Du"] // ഊ
-				} else if currentCharacter == "H" {
-					output += rulesMap["Hu"] // ഔ
-				}
-				i++
-			} else if nextCharacter == "m" {
-				if currentCharacter == "H" {
-					output += rulesMap["Hm"] // ഓ
-				} else if currentCharacter == "t" {
-					output += rulesMap["tm"] // ോ
-				}
-				i++
-			} else {
-				output += rulesMap[currentCharacter]
-			}
-
-		} else if currentCharacter == "s" && nextCharacter == "F" {
-			output += rulesMap["sF"] // ഐ
-			i++
-		} else if currentCharacter == "s" && nextCharacter == "s" {
-			output += rulesMap[nextNextCharacter+rulesMap["ss"]] // ൈ
-			i = i + 2
-		} else if Contains[string](preBase, p) {
-			preBaseCharacter := p
-			mainCharactor := rulesMap[nextCharacter]
-			qCharacter := rulesMap[nextNextCharacter]
-
-			if Contains[string](postBase, qCharacter) {
-				output += mainCharactor + qCharacter + preBaseCharacter
-				i = i + 2
-			} else {
-				if strings.Contains(symbols, nextNextCharacter) {
-					output += mainCharactor + preBaseCharacter + nextNextCharacter
-					i = i + 2
-				} else {
-					if nextCharacter == "{" {
-						output += qCharacter + rulesMap["{"] + preBaseCharacter
-						i = i + 2
-					} else {
-						output += mainCharactor + preBaseCharacter
-						i++
-					}
-				}
-			}
+		if keyExists(preBaseAsciiLetters, currentChar) {
+			prebase = currentChar + prebase
+		} else if keyExists(postBaseAsciiLetters, currentChar) {
+			transposedText += currentChar + prebase
+			prebase = ""
 		} else {
-			output += p
+			transposedText += currentChar
+			if i+1 < len(runes) {
+				nextCharacter := string(runes[i+1])
+				if !keyExists(postBaseAsciiLetters, nextCharacter) {
+					transposedText += prebase
+					prebase = ""
+				}
+			}
 		}
+
+		if prebase != "" {
+			transposedText += prebase
+		}
+
+		// രണ്ടാമത്തെ ഓട്ടം: പച്ച മലയാളം
+		unicodeText := ""
+		i := 0
+		for i < len(runes) {
+			currentChar := string(runes[i])
+			if mappedChar, ok := rulesMap[currentChar]; ok {
+				unicodeText += mappedChar
+			} else {
+				unicodeText += currentChar
+			}
+		}
+
 		i++
 	}
 
@@ -107,7 +79,7 @@ func AsciiToUnicodeByMapFile(input string, mapFilePath string) string {
 	return AsciiToUnicode(input, rulesMap)
 }
 
-func Contains[T comparable](s []T, e T) bool {
+func contains[T comparable](s []T, e T) bool {
 	for _, v := range s {
 		if v == e {
 			return true
