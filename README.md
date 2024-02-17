@@ -14,10 +14,10 @@ Convert:
 
 ```bash
 # Output to terminal
-./payyanscli -font ML-TTKarthika.map file-to-convert.txt
+./payyanscli -font ML-TTKarthika file-to-convert.txt
 
 # Output to a file
-./payyanscli -font ML-TTKarthika.map file-to-convert.txt output-file.txt
+./payyanscli -font ML-TTKarthika file-to-convert.txt output-file.txt
 ```
 
 See `payyanscli -h` for more.
