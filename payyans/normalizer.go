@@ -1,43 +1,14 @@
 package payyans
 
 import (
-	"os"
 	"regexp"
 	"strings"
 
 	"golang.org/x/exp/maps"
 )
 
-// TODO: move this function in a single file where the root can reuse it.
-func ReadAndCleanFile(filename string) (map[string]string, error) {
-	data, err := os.ReadFile(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	dataInString := string(data)
-
-	mapping := make(map[string]string)
-
-	for _, line := range strings.Split(dataInString, "\n") {
-		parts := strings.Split(line, "=")
-		if len(parts) != 2 {
-			continue
-		}
-		lhs, rhs := strings.TrimSpace(parts[0]), strings.TrimSpace(parts[1])
-		mapping[lhs] = rhs
-	}
-
-	return mapping, nil
-}
-
-func Normalize(text string) (string, error) {
-	mapping, err := ReadAndCleanFile("../rules/normalizer_ml.rules")
-	if err != nil {
-		return "", err
-	}
-
-	expression := strings.Join(maps.Keys(mapping), "|")
+func Normalize(input string, rulesMap map[string]string) (string, error) {
+	expression := strings.Join(maps.Keys(rulesMap), "|")
 
 	pattern, err := regexp.Compile(expression)
 
@@ -45,8 +16,8 @@ func Normalize(text string) (string, error) {
 		return "", err
 	}
 
-	some := pattern.ReplaceAllStringFunc(text, func(match string) string {
-		return mapping[match]
+	some := pattern.ReplaceAllStringFunc(input, func(match string) string {
+		return rulesMap[match]
 	})
 
 	return some, nil
