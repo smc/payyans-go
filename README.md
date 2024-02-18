@@ -1,5 +1,7 @@
 # payyans
 
+Note: This repo's canonical source is at https://gitlab.com/smc/payyans-go. Contributions should be done in the canonical source. If you're seeing this from somewhere else, note that it's a mirror.
+
 This is the Go port of [payyans](https://github.com/smc/payyans) and [freaknz](https://gitlab.com/kannanvm/freaknz-qt) together as a shared library. The goal is the logic abstraction through a shared library.
 
 ## Usage
