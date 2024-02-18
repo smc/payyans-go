@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Unicode Converter based on Chekkans</title>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="input-group">
+        <label for="ascii-input">ASCII text</label>
+        <textarea id="ascii-input" rows="18" cols="40"></textarea>
+      </div>
+      <div class="buttons">
+        <button id="convert-ascii">&gt;&gt;</button>
+        <button id="convert-unicode">&lt;&lt;</button>
+      </div>
+      <div class="input-group">
+        <label for="unicode-input">Unicode text</label>
+        <textarea id="unicode-input" rows="18" cols="40"></textarea>
+      </div>
+    </div>
+    <div id="mapselector">
+      <label for="mapselect">Choose the font to convert from:</label>
+      <select id="mapselect">
+        <option value="ML-TTKarthika">ML-TTKarthika</option>
+        {{ range . }}
+          <option value="{{ .Name }}">{{ .Name }}</option>
+        {{ end }}
+      </select>
+    </div>
+    <textarea id="map" rows="100"></textarea>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="wasm_exec.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
