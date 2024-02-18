@@ -35,7 +35,7 @@ func main() {
 
 	var data []FontMap
 
-	entries, err := os.ReadDir("./maps/")
+	entries, err := os.ReadDir("./font-maps/")
 	if err != nil {
 		log.Fatal(err)
 	}
