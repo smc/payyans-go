@@ -9,7 +9,15 @@ pages:
   script:
   - apk add --no-cache make
   - make web
-  - mv web public
+
+  # Convert symlinks to actual folder because GitLab artifact process skips symlinks
+  - cd web
+  - mkdir tmp
+  - for f in $(find . -type l);do mv $(realpath $f) tmp/$f;rm $f;done;
+  - mv tmp/* .
+
+  # Finish
+  - cd ../ && mv web public
   artifacts:
     paths:
     - public
