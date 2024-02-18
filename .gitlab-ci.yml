@@ -1,0 +1,16 @@
+image:
+  name: golang:1.22.0-alpine3.19
+  entrypoint: ["/bin/sh", "-c"]
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+pages:
+  script:
+  - make web
+  - mv web public
+  artifacts:
+    paths:
+    - public
+  rules:
+  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
