@@ -3,8 +3,8 @@
 Setup:
 
 ```bash
-ln -s $(realpath ../unicode-conversion-maps/maps/) font-maps
-ln -s $(realpath ../normalizer/libindic/normalizer/) normalizer-rules
+ln -s ../unicode-conversion-maps/maps/ font-maps
+ln -s ../normalizer/libindic/normalizer/ normalizer-rules
 
 cd ..
 make web
