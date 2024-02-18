@@ -2,34 +2,55 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Unicode Converter based on Chekkans</title>
+    <title>Payyans ASCII &lt;-&gt; Unicode Malayalam Converter</title>
     <link href="style.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   </head>
   <body>
     <div class="container">
-      <div class="input-group">
-        <label for="ascii-input">ASCII text</label>
-        <textarea id="ascii-input" rows="18" cols="40"></textarea>
+      <h1>ASCII Malayalam to Unicode Malayalam converter</h1>
+      <div id="main">
+        <div class="input-group">
+          <label for="ascii-input">ASCII text</label>
+          <textarea id="ascii-input" rows="18" cols="40">Hcp hÀj¯nÂ s^{_phcn amk¯n\p 29 Znhkw Ds­¦nÂ B hÀjs¯ A[nhÀjw F¶p ]dbp¶p. Hcp hÀjw A[nhÀjamtWm F¶v IW¡m¡p¶ AÂsKmcnXamWv Nn{X¯nÂ.
+          </textarea>
+        </div>
+        <div class="buttons">
+          <button id="convert-ascii">&gt;&gt;</button>
+          <button id="convert-unicode" title="Not implemented. Need help">&lt;&lt;</button>
+        </div>
+        <div class="input-group">
+          <label for="unicode-input">Unicode text</label>
+          <textarea id="unicode-input" rows="18" cols="40"></textarea>
+        </div>
       </div>
-      <div class="buttons">
-        <button id="convert-ascii">&gt;&gt;</button>
-        <button id="convert-unicode">&lt;&lt;</button>
+      <div id="mapselector">
+        <label for="mapselect">Choose the font to convert from:</label>
+        <select id="mapselect">
+          <option value="ML-TTKarthika">ML-TTKarthika</option>
+          {{ range . }}
+            <option value="{{ .Name }}">{{ .Name }}</option>
+          {{ end }}
+        </select>
       </div>
-      <div class="input-group">
-        <label for="unicode-input">Unicode text</label>
-        <textarea id="unicode-input" rows="18" cols="40"></textarea>
+      <div id="map-and-rules">
+        <div>
+          Font map<br/>
+          <textarea id="map" rows="100"></textarea>
+        </div>
+        <div>
+          Normalizer Rules<br/>
+          <textarea id="normalizer-rules" rows="10" cols="20"></textarea>
+        </div>
       </div>
     </div>
-    <div id="mapselector">
-      <label for="mapselect">Choose the font to convert from:</label>
-      <select id="mapselect">
-        <option value="ML-TTKarthika">ML-TTKarthika</option>
-        {{ range . }}
-          <option value="{{ .Name }}">{{ .Name }}</option>
-        {{ end }}
-      </select>
+    <div id="footer">
+      <p>Help/Support/Feedback: <a href="https://smc.org.in/contact">https://smc.org.in/contact</a></p>
+      <p><a href="https://github.com/smc/payyans-go">Source code</a></p>
+      <a href="https://smc.org.in">
+        <img src="https://wiki.smc.org.in/images/7/76/Smc-logo.png" />
+      </a>
     </div>
-    <textarea id="map" rows="100"></textarea>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="wasm_exec.js"></script>
     <script src="main.js"></script>
