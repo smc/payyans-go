@@ -1,10 +1,19 @@
-@import url('https://smc.org.in/fonts/manjari.css'); html { font-family: 'Manjari', sans-serif; }
+@import url('https://smc.org.in/fonts/manjari.css'); 
+
+html { 
+  font-family: 'Manjari', sans-serif; 
+}
 
 html, body, p {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+textarea {
+  font-family: 'Manjari', sans-serif; 
+}
+
 .container {
   max-width: 1300px;
   margin: 0 auto;
