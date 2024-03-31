@@ -19,6 +19,7 @@ textarea {
   margin: 0 auto;
 }
 #main {
+  display: grid;
   grid-template-columns: 10fr 1fr 10fr;
   justify-content: center;
   align-items: center;
