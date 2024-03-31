@@ -19,14 +19,12 @@ textarea {
   margin: 0 auto;
 }
 #main {
-  display: flex;
-  flex-wrap: wrap;
+  grid-template-columns: 10fr 1fr 10fr;
   justify-content: center;
   align-items: center;
 }
 .input-group {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   align-items: center;
   margin: 1rem;
 }
@@ -76,14 +74,12 @@ button:hover {
   box-sizing: border-box;
 }
 #map-and-rules {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
   justify-content: center;
 }
 #map-and-rules div {
-  width: 45%;
   margin: 1rem;
 }
 #map, #normalizer-rules {
