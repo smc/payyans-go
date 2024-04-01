@@ -1,10 +1,3 @@
-function initWasm() {
-  const go = new Go();
-  WebAssembly.instantiateStreaming(fetch("payyans.wasm"), go.importObject).then((result) => {
-    go.run(result.instance)
-  });
-}
-
 function updateMap() {
   var mapUrl = $('#mapselect').val();
   mapUrl = './font-maps/' + mapUrl + '.map';
@@ -43,6 +36,5 @@ document.querySelector('#convert-ascii').addEventListener('click', function(e){
   document.querySelector('#unicode-input').value = result
 });
 
-initWasm()
 updateMap()
 updateNormalizerRules()
